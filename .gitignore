@@ -11,7 +11,8 @@
 *.fot
 *.cb
 *.cb2
-.*.lb
+.*.lbù
+out
 
 ## Intermediate documents:
 *.dvi
