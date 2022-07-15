@@ -1,4 +1,4 @@
-\usepackage{hyperref}\section{The Simulation}
+\section{The Simulation}
 
 In this section, we discuss the main elements of the simulation. To fully understand the concepts that are discussed here, such as nodes and programs, please refer to the \href{https://alchemistsimulator.github.io/}{Alchemist documentation}.
 
@@ -8,19 +8,26 @@ The simulation concerns an existing geographical location, that is the amusement
 Once extracted the map in the \texttt{.pbf} format, it is possible to build the simulation environment through the \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvornment}}, as shown in the following listing (\ref{code:osm}).
 
 \begin{lstlisting}[language=yaml, label=code:osm, caption=Building an \textit{OpenStreetMap} environment.]
-# Use an OpenStreetMap Environment, deploying nodes only on streets
+# Use an OpenStreetMap Environment,
+# deploying nodes only on streets.
 environment:
   type: OSMEnvironment
   parameters: [mirabilandia.osm.pbf, true]
 \end{lstlisting}
 
+\noindent
 The constructor of the environment accepts two parameters:
 \begin{itemize}
     \item \texttt{file: String}, the path to the file containing the exported map;
-    \item \texttt{onlyOnStreets: Boolean}, a boolean value allowing to deploy nodes only on the streets found on the map.
+    \item \texttt{onlyOnStreets: Boolean}, a boolean value allowing to deploy nodes only on the streets.
 \end{itemize}
 
 \subsection{Deployed Nodes}
+After setting the environment, it is essential to deploy \textbf{nodes} on the map. In the current simulation, the elements that are represented by nodes are:
+\begin{itemize}
+    \item \textbf{Visitors}, as single individuals or groups; the key point here is that a node should correspond to one or more people using a single wearable device that tracks and guides its carrier.
+    \item \textbf{Attractions}, that can be of different types, such as rides, water slides, restaurants, etc.; they are considered \textit{rendesvouz} points for visitors and are made of several sensors that allow to keep track of many information, such as the number of people waiting in a queue.
+\end{itemize}
 
 \subsection{Programmed Behaviours}
 
