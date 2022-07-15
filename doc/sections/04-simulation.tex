@@ -1,4 +1,24 @@
-\section{The Simulation}
+\usepackage{hyperref}\section{The Simulation}
+
+In this section, we discuss the main elements of the simulation. To fully understand the concepts that are discussed here, such as nodes and programs, please refer to the \href{https://alchemistsimulator.github.io/}{Alchemist documentation}.
+
+\subsection{Map Environment}
+The simulation concerns an existing geographical location, that is the amusement park of \href{https://www.mirabilandia.it/}{\textit{Mirabilandia}}. For this reason, the environment of the simulation must be a map featuring existing paths in the real world. To achieve this, \textit{Alchemist} allows to use maps provided by \href{https://www.openstreetmap.org/}{\textit{OpenStreetMap}}, the free wiki world map. \textit{OpenStreetMap} provides navigation capabilities on the whole planet; such data, weighs about 50GB, thus it is recommended to use an extract with the data relative to the interested area. One great way to obtain an extract is through \href{https://extract.bbbike.org/}{\textit{BBBike}} \cite{Pianini_2013}.
+
+Once extracted the map in the \texttt{.pbf} format, it is possible to build the simulation environment through the \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvornment}}, as shown in the following listing (\ref{code:osm}).
+
+\begin{lstlisting}[language=yaml, label=code:osm, caption=Building an \textit{OpenStreetMap} environment.]
+# Use an OpenStreetMap Environment, deploying nodes only on streets
+environment:
+  type: OSMEnvironment
+  parameters: [mirabilandia.osm.pbf, true]
+\end{lstlisting}
+
+The constructor of the environment accepts two parameters:
+\begin{itemize}
+    \item \texttt{file: String}, the path to the file containing the exported map;
+    \item \texttt{onlyOnStreets: Boolean}, a boolean value allowing to deploy nodes only on the streets found on the map.
+\end{itemize}
 
 \subsection{Deployed Nodes}
 
