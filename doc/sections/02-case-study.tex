@@ -1,1 +1,27 @@
-\section{The Case Study}
+\section{The Case Study}\label{sec:the-case-study}
+
+From now on, the terms of the \textit{ubiquitous language} identified in the analysis document will be used to describe the desired model;
+please, refer to~\href{https://github.com/ICPS-MicroCity/case-study-analysis/releases/tag/v0.2.1}{case-study-analysis} to avoid ambiguities.
+
+As already discussed in the above analysis, attractions may cause considerable queues with long waiting times.
+The aim of this simulation is to determine whether a \textit{situated recommendation system} may help reduce the waiting time needed to benefit from an attraction.
+In order to achieve this, two simulations will be developed:
+\begin{enumerate}
+    \item \textbf{Random Redirection}: this one should reflect the current system, that is, once a visitor is satisfied by an attraction they move towards another attraction which is statistically chosen randomly.
+    \item \textbf{Recommended Redirection}: this one should reflect the desired system, that is, once a visitor is satisfied by an attraction they move towards the next one accepting a recommendation.
+    The latter may suggest an attraction if it has a short queue and if it is close enough to the visitor.
+\end{enumerate}
+%
+Specifically, the model of the two simulations will include the following aspects:
+\begin{itemize}
+    \item A real world map of the amusement park, that is \href{https://www.mirabilandia.it/}{\textit{Mirabilandia}}, one of the most famous amusement parks in Italy.
+    In particular, the simulation will only focus on the environment inside the park's boundaries.
+    Moreover, the map will contain a network of routes that connect the attractions and can be exploited by visitors to move around the park.
+    \item Attractions of many types (rides, water slides, restaurants, etc.) physically situated on the map.
+    Their location will adhere to the actual location inside the park.
+    Finally, they will be able to dequeue a specific amount of visitors, that had previously enqueued, and satisfy them.
+    \item Visitors that will be able to move towards a specific attraction, chosen with one of the above policies, and wait for their turn in order to benefit from the attraction itself.
+    Once they have been satisfied, they will proactively choose the next attraction.
+\end{itemize}
+%Specifically, an amusement park populated by visitors moving around can be seen as a complex system where people direct themselves towards a specific location in order to satisfy their needs.
+%Under this perspective, the \textit{Alchemist Simulator}~\cite{Pianini_2013} is perfect to endow simulated people with a personal will to satisfy their needs and direct themselves towards the desired attraction in the amusement park.
