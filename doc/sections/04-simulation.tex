@@ -1,4 +1,4 @@
-\section{The Simulation}
+\usepackage{hyperref}\section{The Simulation}
 
 In this section, we discuss the main elements of the simulation. To fully understand the concepts that are discussed here, such as nodes and programs, please refer to the \href{https://alchemistsimulator.github.io/}{Alchemist documentation}.
 
@@ -37,7 +37,6 @@ In order to deploy nodes on the map it is mandatory to declare them under the \t
 _visitors: &visitors
   - type: Polygon
     parameters: [ 100, *bounds ]
-    programs: *visitorPrograms
     contents:
       - { molecule: visitor, concentration: true }
 
@@ -45,7 +44,6 @@ _visitors: &visitors
 _attractions: &attractions
   - type: Point
     parameters: [44.33589, 12.26293]
-    programs: *attractionPrograms
     contents:
       - { molecule: attraction, concentration: true }
       - { molecule: attractionType, concentration: "\"restaurant\"" }
@@ -59,7 +57,7 @@ deployments:
 \end{lstlisting}
 
 \noindent
-Moreover, it is necessary to explicit which \textbf{linking rule} will be used to connect nodes with each other. As for the current simulation, the proper way to connect nodes cannot be based on a geometric rule (for instance, connecting nodes within a certain distance). Instead, it is appropriate to consider attractions as \textbf{access points} for the visitors' devices. Even with this linking rule every node on the map will be connected with the rest of the network as the attractions are distributed throughout all the map, and, working as access points, they can cover it without leaving connectionless areas.
+Moreover, it is necessary to explicit which \textbf{linking rule} will be used to connect nodes with each other. As for the current simulation, the proper way to connect nodes cannot be based on a geometric rule (for instance, connecting nodes within a certain distance). Instead, it is appropriate to consider attractions as \textbf{access points} for the visitors' devices. Even with the \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.linkingrules/-connect-to-access-point/index.html}{\texttt{ConnectToAccessPoint}} linking rule every node on the map will be connected with the rest of the network as the attractions are distributed throughout the map, and, working as access points, they can cover it without leaving connectionless areas.
 
 \begin{lstlisting}[language=yaml, label=code:linking, caption=Defining the linking rule: only nodes with the molecule \texttt{attraction} will connect to other nodes within a radius of 100 meters.]
 # The network model used allows to choose the nodes that have the
@@ -70,5 +68,6 @@ network-model:
 \end{lstlisting}
 
 \subsection{Programmed Behaviours}
+With the environment and the nodes set, the next step consists in programming their behaviours.
 
 \subsection{Data Extraction}
