@@ -29,6 +29,46 @@ After setting the environment, it is essential to deploy \textbf{nodes} on the m
     \item \textbf{Attractions}, that can be of different types, such as rides, water slides, restaurants, etc.; they are considered \textit{rendesvouz} points for visitors and are made of several sensors that allow to keep track of many information, such as the number of people waiting in a queue.
 \end{itemize}
 
+\noindent
+In order to deploy nodes on the map it is mandatory to declare them under the \texttt{deployment} keyword, as shown in the following listing.
+
+\begin{lstlisting}[language=yaml, label=code:deployment, caption=Deploying 1 attraction and 100 visitors inside the \texttt{bounds} polygon.]
+# Define visitors
+_visitors: &visitors
+  - type: Polygon
+    parameters: [ 100, *bounds ]
+    programs: *visitorPrograms
+    contents:
+      - { molecule: visitor, concentration: true }
+
+# Define attractions
+_attractions: &attractions
+  - type: Point
+    parameters: [44.33589, 12.26293]
+    programs: *attractionPrograms
+    contents:
+      - { molecule: attraction, concentration: true }
+      - { molecule: attractionType, concentration: "\"restaurant\"" }
+      - { molecule: capacity, concentration: 10 }
+      - { molecule: name, concentration: "\"McDonald's\"" }
+
+# Deploy nodes
+deployments:
+  - *attractions
+  - *visitors
+\end{lstlisting}
+
+\noindent
+Moreover, it is necessary to explicit which \textbf{linking rule} will be used to connect nodes with each other. As for the current simulation, the proper way to connect nodes cannot be based on a geometric rule (for instance, connecting nodes within a certain distance). Instead, it is appropriate to consider attractions as \textbf{access points} for the visitors' devices. Even with this linking rule every node on the map will be connected with the rest of the network as the attractions are distributed throughout all the map, and, working as access points, they can cover it without leaving connectionless areas.
+
+\begin{lstlisting}[language=yaml, label=code:linking, caption=Defining the linking rule: only nodes with the molecule \texttt{attraction} will connect to other nodes within a radius of 100 meters.]
+# The network model used allows to choose the nodes that have the
+# "attraction" molecule in order to simulate an access point behaviour
+network-model:
+  type: ConnectToAccessPoint
+  parameters: [100.0, "attraction"]
+\end{lstlisting}
+
 \subsection{Programmed Behaviours}
 
 \subsection{Data Extraction}
