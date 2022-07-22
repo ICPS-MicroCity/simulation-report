@@ -68,10 +68,14 @@ network-model:
 \end{lstlisting}
 
 \subsection{Programmed Behaviours}
-With the environment and the nodes set, the next step consists in programming their behaviours. Each and every node needs to implement a proper behaviour depending on its type. In particular, visitors and attractions will have different behaviours: for instance, visitors should move on the map in order to get to attractions, while the latter should stay still and satisfy enqueued visitors. The following sections describe the behaviours implemented by visitors and attractions.
+With the environment and the nodes set, the next step consists in programming their behaviours.
+Each and every node needs to implement a proper behaviour depending on its type.
+In particular, visitors and attractions will have different behaviours: for instance, visitors should move on the map in order to get to attractions, while the latter should stay still and satisfy enqueued visitors.
+The following sections describe the behaviours implemented by visitors and attractions.
 
 \subsubsection{Attractions' Positions}
-In order to make each visitor node aware of the positions of all the attractions in the map, it is necessary to implement a behaviour that spreads the desired information. To do so, it is useful to use \textit{aggregate programming}. Specifically, \textit{Alchemist} allows inserting an external program into a node, as shows the following listing.
+In order to make each visitor node aware of the positions of all the attractions in the map, it is necessary to implement a behaviour that spreads the desired information. To do so, it is useful to use \textit{aggregate programming}.
+Specifically, \textit{Alchemist} allows inserting an external program into a node, as shows the following listing.
 
 \begin{lstlisting}[language=yaml, label=code:positions, caption=Assign the \texttt{org:protelis:microcity:positions} behaviour to 100 visitors and 2 attractions.]
 # Define the broadcast message from attractions to visitors
@@ -103,7 +107,8 @@ _attractions: &attractions
       - { molecule: attraction, concentration: true }
 \end{lstlisting}
 
-On the other hand, the definition of the aggregate program should describe how the desired information is spread around as a field. In particular, each node should gather the field from its neighbours and merge the received values. The listing \ref{} shows how it is possible to implement this behaviour in \textit{Protelis}.
+On the other hand, the definition of the aggregate program should describe how the desired information is spread around as a field.
+In particular, each node should gather the field from its neighbours and merge the received values. The listing \ref{} shows how it is possible to implement this behaviour in \textit{Protelis}.
 
 \begin{lstlisting}[label=code:protelis-positions, caption=Sharing the coordinates of each attraction to all the nodes that implement this behaviour.]
 module org:protelis:microcity:positions
@@ -116,13 +121,25 @@ share (field <- attractionPositions()) {
 }
 \end{lstlisting}
 
-The \texttt{attractionPositions} function simply builds a list with the node's position if it owns an "attraction" molecule, otherwise an empty list. In this way, the field is composed by lists of positions containing only attractions' coordinates. The \texttt{attractionUnion} function just unifies the received lists into a single one.
+The \texttt{attractionPositions} function simply builds a list with the node's position if it owns an "attraction" molecule, otherwise an empty list.
+In this way, the field is composed by lists of positions containing only attractions' coordinates. The \texttt{attractionUnion} function just unifies the received lists into a single one.
 
-\subsubsection{Queues}
-% describe how queues are made and how they are spread to visitor nodes
+\subsubsection{Queues \& Satisfaction}
+Similarly to positions, it is necessary to keep track of the queues that form nearby attractions and spread them to visitors.
+The queue formed nearby an attraction is determined by the set of visitors that have the same coordinates as the attraction.
+Though, it is important that the visitors waiting in the queue are not satisfied.
+In fact, a visitor's satisfaction is a condition that only occurs after it has benefitted from an attraction.
+When satisfied, the visitor is then ready to choose the next destination, and, once the next attraction is decided, it can turn back to unsitisfied.
+These behaviours can be split up into 3 different \textit{Protelis} programs:
+\begin{itemize}
+  \item \textbf{\texttt{queue}}: given an attraction, determine the list of visitors that are enqueued to it.
+  \item \textbf{\texttt{queues}}: spread the queues of every attraction to every visitor.
+  \item \textbf{\texttt{satisfaction}}: given an attraction, satisfy the first $N$ visitors in its queue, where $N$ stands for the attraction's capacity.
+\end{itemize}
 
-\subsubsection{Satisfaction}
-% describe how attractions satisfy visitors, focusing also on the different time distribution
+\noindent
+All these behaviours are programmed by both attractions and visitors.
+The \texttt{satisfaction} program has a lower time distribution, as it is assumed that it takes a while for an attraction to satisfy visitors.
 
 \subsubsection{Movement}
 Movement is a feature only owned by visitors. It is implemented as a \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.actions/-target-map-walker/index.html}{\texttt{TargetMapWalker}}: this action needs a "tracking" molecule inside the implementing node that has a destination's coordinates as its concentration.
@@ -147,7 +164,5 @@ _destination: &destination
     program: org:protelis:microcity:destination
   - program: send
 \end{lstlisting}
-
-% describe the two policies implementation
 
 \subsection{Data Extraction}
