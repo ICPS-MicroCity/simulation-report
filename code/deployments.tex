@@ -1,0 +1,23 @@
+\begin{lstlisting}[language=yaml, label={lst:deployment}, caption=Deploying 1 attraction and 100 visitors inside the \texttt{bounds} polygon.]
+# Define visitors
+_visitors: &visitors
+  - type: Polygon
+    parameters: [ 100, *bounds ]
+    contents:
+      - { molecule: visitor, concentration: true }
+
+# Define attractions
+_attractions: &attractions
+  - type: Point
+    parameters: [44.33589, 12.26293]
+    contents:
+      - { molecule: attraction, concentration: true }
+      - { molecule: attractionType, concentration: "\"restaurant\"" }
+      - { molecule: capacity, concentration: 10 }
+      - { molecule: name, concentration: "\"McDonald's\"" }
+
+# Deploy nodes
+deployments:
+  - *attractions
+  - *visitors
+\end{lstlisting}

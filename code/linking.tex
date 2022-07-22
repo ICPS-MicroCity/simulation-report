@@ -1,0 +1,7 @@
+\begin{lstlisting}[language=yaml, label={lst:linking}, caption=Defining the linking rule: only nodes with the molecule \texttt{attraction} will connect to other nodes within a radius of 100 meters.]
+# The network model used allows to choose the nodes that have the
+# "attraction" molecule in order to simulate an access point behaviour
+network-model:
+  type: ConnectToAccessPoint
+  parameters: [100.0, "attraction"]
+\end{lstlisting}

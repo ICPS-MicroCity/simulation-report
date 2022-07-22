@@ -1,0 +1,29 @@
+\begin{lstlisting}[language=yaml, label={lst:positions}, caption=Assign the \texttt{org:protelis:microcity:positions} behaviour to 100 visitors and 2 attractions.]
+# Define the broadcast message from attractions to visitors
+# to spread their positions
+_positions: &positions
+  - time-distribution: 1
+    program: org:protelis:microcity:positions
+  - program: send
+
+# Define visitors
+_visitors: &visitors
+  - type: Polygon
+    parameters: [ 100, *bounds ]
+    programs: *positions
+    contents:
+      - { molecule: visitor, concentration: true }
+
+# Define attractions
+_attractions: &attractions
+  - type: Point
+    parameters: [44.33747, 12.26208]
+    programs: *positions
+    contents:
+      - { molecule: attraction, concentration: true }
+  - type: Point
+    parameters: [ 44.33815, 12.2633 ]
+    programs: *positions
+    contents:
+      - { molecule: attraction, concentration: true }
+\end{lstlisting}

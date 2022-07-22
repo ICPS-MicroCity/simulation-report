@@ -1,0 +1,17 @@
+\begin{lstlisting}[language=yaml, label=code:movement, caption=Define the movement behaviour for visitors.]
+# Define the movement law with a Walker that moves only on streets towards
+# a GeoPosition indicated by the concentration of the tracking molecule
+_move: &move
+  - time-distribution: 1
+    type: Event
+    actions:
+      - type: TargetMapWalker
+        parameters: [org:protelis:microcity:destination, 1.0]
+
+# Define the rule that establishes how visitors choose the
+# next destination
+_destination: &destination
+  - time-distribution: 1
+    program: org:protelis:microcity:destination
+  - program: send
+\end{lstlisting}
