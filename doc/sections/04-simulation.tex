@@ -1,4 +1,4 @@
-\usepackage{hyperref}\section{The Simulation}
+\section{The Simulation}
 
 In this section, we discuss the main elements of the simulation. To fully understand the concepts that are discussed here, such as nodes and programs, please refer to the \href{https://alchemistsimulator.github.io/}{Alchemist documentation}.
 
@@ -68,6 +68,86 @@ network-model:
 \end{lstlisting}
 
 \subsection{Programmed Behaviours}
-With the environment and the nodes set, the next step consists in programming their behaviours.
+With the environment and the nodes set, the next step consists in programming their behaviours. Each and every node needs to implement a proper behaviour depending on its type. In particular, visitors and attractions will have different behaviours: for instance, visitors should move on the map in order to get to attractions, while the latter should stay still and satisfy enqueued visitors. The following sections describe the behaviours implemented by visitors and attractions.
+
+\subsubsection{Attractions' Positions}
+In order to make each visitor node aware of the positions of all the attractions in the map, it is necessary to implement a behaviour that spreads the desired information. To do so, it is useful to use \textit{aggregate programming}. Specifically, \textit{Alchemist} allows inserting an external program into a node, as shows the following listing.
+
+\begin{lstlisting}[language=yaml, label=code:positions, caption=Assign the \texttt{org:protelis:microcity:positions} behaviour to 100 visitors and 2 attractions.]
+# Define the broadcast message from attractions to visitors
+# to spread their positions
+_positions: &positions
+  - time-distribution: 1
+    program: org:protelis:microcity:positions
+  - program: send
+
+# Define visitors
+_visitors: &visitors
+  - type: Polygon
+    parameters: [ 100, *bounds ]
+    programs: *positions
+    contents:
+      - { molecule: visitor, concentration: true }
+
+# Define attractions
+_attractions: &attractions
+  - type: Point
+    parameters: [44.33747, 12.26208]
+    programs: *positions
+    contents:
+      - { molecule: attraction, concentration: true }
+  - type: Point
+    parameters: [ 44.33815, 12.2633 ]
+    programs: *positions
+    contents:
+      - { molecule: attraction, concentration: true }
+\end{lstlisting}
+
+On the other hand, the definition of the aggregate program should describe how the desired information is spread around as a field. In particular, each node should gather the field from its neighbours and merge the received values. The listing \ref{} shows how it is possible to implement this behaviour in \textit{Protelis}.
+
+\begin{lstlisting}[label=code:protelis-positions, caption=Sharing the coordinates of each attraction to all the nodes that implement this behaviour.]
+module org:protelis:microcity:positions
+
+import microcity.Positions.attractionPositions
+import microcity.Positions.attractionUnion
+
+share (field <- attractionPositions()) {
+    foldHoodPlusSelf(field, { a, b -> attractionUnion(a, b) })
+}
+\end{lstlisting}
+
+The \texttt{attractionPositions} function simply builds a list with the node's position if it owns an "attraction" molecule, otherwise an empty list. In this way, the field is composed by lists of positions containing only attractions' coordinates. The \texttt{attractionUnion} function just unifies the received lists into a single one.
+
+\subsubsection{Queues}
+% describe how queues are made and how they are spread to visitor nodes
+
+\subsubsection{Satisfaction}
+% describe how attractions satisfy visitors, focusing also on the different time distribution
+
+\subsubsection{Movement}
+Movement is a feature only owned by visitors. It is implemented as a \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.actions/-target-map-walker/index.html}{\texttt{TargetMapWalker}}: this action needs a "tracking" molecule inside the implementing node that has a destination's coordinates as its concentration.
+Moreover, the latter allows nodes to move only on street maps, sticking with the provided \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvornment}}.
+
+As discussed in the section \ref{sec:the-case-study}, in order to decide its next destination, a visitor can adapt one of two policies: \textbf{Random Redirection} or \textbf{Recommended Redirection}. For this, visitors also own a program that establishes the next destination with one of the two policies and inserts its coordinates in a molecule. The listings \ref{code:movement}
+
+\begin{lstlisting}[language=yaml, label=code:movement, caption=Define the movement behaviour for visitors.]
+# Define the movement law with a Walker that moves only on streets towards
+# a GeoPosition indicated by the concentration of the tracking molecule
+_move: &move
+  - time-distribution: 1
+    type: Event
+    actions:
+      - type: TargetMapWalker
+        parameters: [org:protelis:microcity:destination, 1.0]
+
+# Define the rule that establishes how visitors choose the
+# next destination
+_destination: &destination
+  - time-distribution: 1
+    program: org:protelis:microcity:destination
+  - program: send
+\end{lstlisting}
+
+% describe the two policies implementation
 
 \subsection{Data Extraction}
