@@ -86,7 +86,7 @@ The \texttt{satisfaction} program has a lower time distribution, as it is assume
 \subsubsection{Movement}
 Movement is a feature only owned by visitors.
 It is implemented as a \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.actions/-target-map-walker/index.html}{\texttt{TargetMapWalker}}: this action needs a ``tracking" molecule inside the implementing node that has a destination's coordinates as its concentration.
-Moreover, the latter allows nodes to move only on maps' streets, adapting to the provided \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvironment}}.
+Moreover, the latter allows nodes to move only on maps' streets, adapting to the provided~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvironment}}.
 
 As discussed in the section~\ref{sec:the-case-study}, in order to decide its next destination, a visitor can adopt one of these two policies: \textbf{Random Redirection} or \textbf{Recommended Redirection}.
 In order to achieve this, visitors also own a program that establishes the next destination with one of the two policies and inserts its coordinates in a molecule.
@@ -106,6 +106,9 @@ For the sake of the current simulations, the following policies were provided:
 \subsection{Data Extraction}\label{subsec:data-extraction}
 The whole point of the simulations consists in determining whether a \textit{situated recommendation system} may help reduce the waiting time for visitors inside the park.
 In order to evaluate that, it is necessary to extract data from the simulation.
-In particular, the data we extracted and analyzed concerns the number of attractions that every visitor has benefited from.
-This was possible thanks to a specific molecule \texttt{satisfactions} that counts the amount of times that a visitor has been satisfied by an attraction.
+In particular, the data we extracted and analyzed concerns the amount of time spent in a queue and the number of attractions that every visitor has benefited from.
+Data extraction is achieved thanks to the implementation of an~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.loader.export/-extractor/index.html}{\texttt{Extractor}} that allows controlling and exploring the environment at each simulation step.
+Thanks to that, it was possible to address the waiting time of a visitor to the amount of steps it spends in a queue.
+On the other hand, counting the amount of times that a visitor has been satisfied by an attraction was possible thanks to a specific molecule \texttt{satisfactions}.
+These two types of data, on average, considering both the \textit{random redirection} and the \textit{recommended redirection} systems, consent to state whether visitors benefit from more attractions and wait less time in queues or not; thus, they are considered to be the best way to evaluate the \textit{situated recommendation system}.
 
