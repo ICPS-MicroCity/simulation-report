@@ -94,4 +94,18 @@ The listing~\ref{code:movement} shows how the \texttt{TargetMapWalker} behaviour
 
 \input{../code/movement}
 
+In order to choose the next destination for a visitor, a \textit{Protelis} program will call a function \texttt{getNext} that will return the coordinates of the next attraction.
+It is possible to define a custom policy just by implementing the interface \texttt{NextPolicy}, and therefore defining the method \texttt{getNext}.
+For the sake of the current simulations, the following policies were provided:
+\begin{itemize}
+    \item \texttt{RandomPolicy}: performs a \textit{random redirection} by choosing one of the attractions inside the park randomly.
+    \item \texttt{ShortestQueuePolicy}: performs a \textit{recommended redirection} by choosing the attraction with the shortest queue inside the whole park.
+    \item \texttt{ShortestQueueInRangePolicy}: performs a \textit{recommended redirection} by choosing the attraction with the shortest queue within a given range with regard to the visitor.
+\end{itemize}
+
 \subsection{Data Extraction}\label{subsec:data-extraction}
+The whole point of the simulations consists in determining whether a \textit{situated recommendation system} may help reduce the waiting time for visitors inside the park.
+In order to evaluate that, it is necessary to extract data from the simulation.
+In particular, the data we extracted and analyzed concerns the number of attractions that every visitor has benefited from.
+This was possible thanks to a specific molecule \texttt{satisfactions} that counts the amount of times that a visitor has been satisfied by an attraction.
+
