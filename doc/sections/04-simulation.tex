@@ -47,6 +47,10 @@ Even with the~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemis
 With both the environment and the nodes correctly set, the next step consists in programming their behaviours.
 Each and every node needs to implement a proper behaviour depending on its type.
 In particular, visitors and attractions will have different behaviours: for instance, visitors should move on the map in order to get to attractions, while the latter should stay still and satisfy enqueued visitors.
+The behaviours are written using the \textit{Protelis} aggregate language.
+Although, performing local computations using a programming language designed for the aggregate paradigm is probably not the best choice.
+So, it is appropriate to implement local computations with a different language.
+Therefore, for this simulation, also \textit{Kotlin} was used.
 The following sections describe the behaviours implemented by visitors and attractions.
 
 \subsubsection{Attractions' Positions}
