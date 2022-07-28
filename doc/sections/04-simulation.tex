@@ -87,7 +87,7 @@ These behaviours can be split into 3 different \textit{Protelis} programs:
 All these behaviours are programmed by both attractions and visitors.
 The \texttt{satisfaction} program has a lower time distribution, as it is assumed that it takes a while for an attraction to satisfy visitors.
 
-\subsubsection{Movement}
+\subsubsection{Movement}\label{subsubsec:movement}
 Movement is a feature only owned by visitors.
 It is implemented as a \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.actions/-target-map-walker/index.html}{\texttt{TargetMapWalker}}: this action needs a ``tracking" molecule inside the implementing node that has a destination's coordinates as its concentration.
 Moreover, the latter allows nodes to move only on maps' streets, adapting to the provided~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvironment}}.
@@ -107,7 +107,7 @@ For the sake of the current simulations, the following policies were provided:
     \item \texttt{ShortestQueueInRangePolicy}: performs a \textit{recommended redirection} by choosing the attraction with the shortest queue within a given range with regard to the visitor.
 \end{itemize}
 
-\subsection{Data Extraction}\label{subsec:data-extraction}
+\subsection{Data Extraction \& Evaluation}\label{subsec:data-extraction}
 The whole point of the simulations consists in determining whether a \textit{situated recommendation system} may help reduce the waiting time for visitors inside the park.
 In order to evaluate that, it is necessary to extract data from the simulation.
 In particular, the data we extracted and analyzed concerns the amount of time spent in a queue and the number of attractions that every visitor has benefited from.
@@ -117,3 +117,302 @@ On the other hand, counting the amount of times that a visitor has been satisfie
 These two types of data, on average, considering both the \textit{random redirection} and the \textit{recommended redirection} systems, consent to state whether visitors benefit from more attractions and wait less time in queues or not;
 thus, they are considered to be a reasonable way to evaluate the \textit{situated recommendation system}.
 
+For the evaluation, the right way to obtain reliable data is to launch every simulation multiple times and finally consider the average values of such data.
+The following evaluations are based on the data obtained from 10 simulation runs for each redirection policy described in the section~\ref{subsubsec:movement}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            xmin=0, xmax=10000,
+            ymin=0, ymax=10000,
+            xtick={0, 1000, ..., 10000},
+            minor ytick={0,1000,...,10000},
+            axis x line=bottom,
+            axis y line=left,
+            axis x discontinuity=crunch,
+            ymajorgrids=true,
+            yminorgrids=true,
+            xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+            axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+            legend style={
+                at={(0,0)},
+                anchor=north east,
+                at={(axis description cs:0.5, -0.2)}
+            }
+        ]
+            \addplot [mark=*, color=blue] coordinates {
+                (0, 0.0)
+                (500, 1.0)
+                (1000, 1.0)
+                (1500, 100.0)
+                (2000, 1.0)
+                (2500, 1000.0)
+                (3000, 1.0)
+                (3500, 1.0)
+                (4000, 1.0)
+                (4500, 1.0)
+                (5000, 100.0)
+                (5500, 1.0)
+                (6000, 1.0)
+                (6500, 1.0)
+                (7000, 1000.0)
+                (7500, 1.0)
+                (8000, 1.0)
+                (8500, 1000.0)
+                (9000, 1.0)
+                (9500, 1.0)
+                (10000, 1.0)
+            };
+            \addplot [mark=*, color=green] coordinates {
+                (0, 0.0)
+                (500, 1.0)
+                (1000, 1.0)
+                (1500, 100.0)
+                (2000, 1.0)
+                (2500, 1.0)
+                (3000, 1.0)
+                (3500, 1000.0)
+                (4000, 10000.0)
+                (4500, 1.0)
+                (5000, 100.0)
+                (5500, 1.0)
+                (6000, 1.0)
+                (6500, 1.0)
+                (7000, 1000.0)
+                (7500, 1.0)
+                (8000, 1.0)
+                (8500, 1000.0)
+                (9000, 1.0)
+                (9500, 1.0)
+                (10000, 1.0)
+            };
+            \addplot [mark=*, color=red] coordinates {
+                (0, 0.0)
+                (500, 1000.0)
+                (1000, 1.0)
+                (1500, 100.0)
+                (2000, 1.0)
+                (2500, 1.0)
+                (3000, 1.0)
+                (3500, 1.0)
+                (4000, 1.0)
+                (4500, 1.0)
+                (5000, 100.0)
+                (5500, 1.0)
+                (6000, 1.0)
+                (6500, 1.0)
+                (7000, 1000.0)
+                (7500, 1.0)
+                (8000, 1000.0)
+                (8500, 1000.0)
+                (9000, 1.0)
+                (9500, 10000.0)
+                (10000, 1.0)
+            };
+            \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average satisfactions for the three different redirection policies.}
+    \label{plot:mean-satisfaction}
+\end{figure}
+
+As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps. ...
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=0, xmax=10000,
+        ymin=0, ymax=10000,
+        xtick={0, 1000, ..., 10000},
+        minor ytick={0,1000,...,10000},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=north east,
+            at={(axis description cs:0.5, -0.2)}
+        }
+        ]
+        \addplot [mark=*, color=blue] coordinates {
+            (0, 0.0)
+            (500, 1.0)
+            (1000, 1.0)
+            (1500, 100.0)
+            (2000, 1.0)
+            (2500, 1000.0)
+            (3000, 1.0)
+            (3500, 1.0)
+            (4000, 1.0)
+            (4500, 1.0)
+            (5000, 100.0)
+            (5500, 1.0)
+            (6000, 1.0)
+            (6500, 1.0)
+            (7000, 1000.0)
+            (7500, 1.0)
+            (8000, 1.0)
+            (8500, 1000.0)
+            (9000, 1.0)
+            (9500, 1.0)
+            (10000, 1.0)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            (0, 0.0)
+            (500, 1.0)
+            (1000, 1.0)
+            (1500, 100.0)
+            (2000, 1.0)
+            (2500, 1.0)
+            (3000, 1.0)
+            (3500, 1000.0)
+            (4000, 10000.0)
+            (4500, 1.0)
+            (5000, 100.0)
+            (5500, 1.0)
+            (6000, 1.0)
+            (6500, 1.0)
+            (7000, 1000.0)
+            (7500, 1.0)
+            (8000, 1.0)
+            (8500, 1000.0)
+            (9000, 1.0)
+            (9500, 1.0)
+            (10000, 1.0)
+        };
+        \addplot [mark=*, color=red] coordinates {
+            (0, 0.0)
+            (500, 1000.0)
+            (1000, 1.0)
+            (1500, 100.0)
+            (2000, 1.0)
+            (2500, 1.0)
+            (3000, 1.0)
+            (3500, 1.0)
+            (4000, 1.0)
+            (4500, 1.0)
+            (5000, 100.0)
+            (5500, 1.0)
+            (6000, 1.0)
+            (6500, 1.0)
+            (7000, 1000.0)
+            (7500, 1.0)
+            (8000, 1000.0)
+            (8500, 1000.0)
+            (9000, 1.0)
+            (9500, 10000.0)
+            (10000, 1.0)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average waiting times for the three different redirection policies.}
+    \label{plot:mean-waiting-times}
+\end{figure}
+
+As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps. ...
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=0, xmax=10000,
+        ymin=0, ymax=10000,
+        xtick={0, 1000, ..., 10000},
+        minor ytick={0,1000,...,10000},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=north east,
+            at={(axis description cs:0.5, -0.2)}
+        }
+        ]
+        \addplot [mark=*, color=blue] coordinates {
+            (0, 0.0)
+            (500, 1.0)
+            (1000, 1.0)
+            (1500, 100.0)
+            (2000, 1.0)
+            (2500, 1000.0)
+            (3000, 1.0)
+            (3500, 1.0)
+            (4000, 1.0)
+            (4500, 1.0)
+            (5000, 100.0)
+            (5500, 1.0)
+            (6000, 1.0)
+            (6500, 1.0)
+            (7000, 1000.0)
+            (7500, 1.0)
+            (8000, 1.0)
+            (8500, 1000.0)
+            (9000, 1.0)
+            (9500, 1.0)
+            (10000, 1.0)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            (0, 0.0)
+            (500, 1.0)
+            (1000, 1.0)
+            (1500, 100.0)
+            (2000, 1.0)
+            (2500, 1.0)
+            (3000, 1.0)
+            (3500, 1000.0)
+            (4000, 10000.0)
+            (4500, 1.0)
+            (5000, 100.0)
+            (5500, 1.0)
+            (6000, 1.0)
+            (6500, 1.0)
+            (7000, 1000.0)
+            (7500, 1.0)
+            (8000, 1.0)
+            (8500, 1000.0)
+            (9000, 1.0)
+            (9500, 1.0)
+            (10000, 1.0)
+        };
+        \addplot [mark=*, color=red] coordinates {
+            (0, 0.0)
+            (500, 1000.0)
+            (1000, 1.0)
+            (1500, 100.0)
+            (2000, 1.0)
+            (2500, 1.0)
+            (3000, 1.0)
+            (3500, 1.0)
+            (4000, 1.0)
+            (4500, 1.0)
+            (5000, 100.0)
+            (5500, 1.0)
+            (6000, 1.0)
+            (6500, 1.0)
+            (7000, 1000.0)
+            (7500, 1.0)
+            (8000, 1000.0)
+            (8500, 1000.0)
+            (9000, 1.0)
+            (9500, 10000.0)
+            (10000, 1.0)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Variance of the waiting times for the three different redirection policies.}
+    \label{plot:var-waiting-times}
+\end{figure}
+
+As shown in the plot~\ref{plot:var-waiting-times}, the waiting times increase with the simulation steps. ...
