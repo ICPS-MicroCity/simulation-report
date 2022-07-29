@@ -134,11 +134,11 @@ The following evaluations are based on the data obtained from 10 simulation runs
             ymajorgrids=true,
             yminorgrids=true,
             xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
-            axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+            axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
             legend style={
                 at={(0,0)},
-                anchor=north east,
-                at={(axis description cs:0.5, -0.2)}
+                anchor=south west,
+                at={(axis description cs:-0.1, -0.4)}
             }
         ]
             \addplot [mark=*, color=blue] coordinates {
@@ -184,7 +184,10 @@ The following evaluations are based on the data obtained from 10 simulation runs
     \label{plot:mean-satisfaction}
 \end{figure}
 
-As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps. ...
+As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps.
+The \textit{shortest queue redirection} is clearly the worst case, as visitors could cross the entire map in order to reach the attraction with the shortest queue.
+Instead, \textit{shortest queue in range redirection} assures that the next attraction will be inside a certain range, reducing the route to walk.
+In fact, this policy brings on a higher number of satisfactions, even compared to the \textit{random redirection}.
 
 \begin{figure}[H]
     \centering
@@ -200,11 +203,11 @@ As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions i
         ymajorgrids=true,
         yminorgrids=true,
         xlabel={Simulation steps}, ylabel={Average waiting times}, title={},
-        axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+        axis on top=true, clip=false,  width=\textwidth, height=.65\textwidth,
         legend style={
             at={(0,0)},
-            anchor=north east,
-            at={(axis description cs:0.5, -0.2)}
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
         }
         ]
         \addplot [mark=*, color=blue] coordinates {
@@ -250,7 +253,14 @@ As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions i
     \label{plot:mean-waiting-times}
 \end{figure}
 
-As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps. ...
+As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps.
+Paradoxically, the best case here is still the \textit{random redirection}.
+This is probably due to the physical distribution of visitors, that are much more spread in a random fashion.
+Indeed, comparing the two recommendation-based policies the best one remains the \textit{shortest queue in range redirection}.
+
+However, considering the \textit{shortest queue in range redirection}, increasing waiting times also mean that visitors spend more time in queues and less time walking in order to reach the attractions.
+Keeping in mind that the number of satisfaction is higher for this policy, this can be considered a positive factor, as this result perfectly fits with the policy's aim.
+So, the correct trend to evaluate is the waiting time per attraction one, which is displayed in the plot~\ref{plot:waiting-time-per-attraction}.
 
 \begin{figure}[H]
     \centering
@@ -265,12 +275,12 @@ As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase w
         axis x discontinuity=crunch,
         ymajorgrids=true,
         yminorgrids=true,
-        xlabel={Simulation steps}, ylabel={Waiting times variance}, title={},
-        axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+        xlabel={Simulation steps}, ylabel={Waiting time per attraction}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
         legend style={
             at={(0,0)},
-            anchor=north east,
-            at={(axis description cs:0.5, -0.2)}
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
         }
         ]
         \addplot [mark=*, color=blue] coordinates {
@@ -294,7 +304,7 @@ As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase w
             (2500, 1.0)
             (3000, 1.0)
             (3500, 1000.0)
-            (4000, 10000.0)
+            (4000, 1000.0)
             (4500, 1.0)
         };
         \addplot [mark=*, color=red] coordinates {
@@ -312,8 +322,6 @@ As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase w
         \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
         \end{axis}
     \end{tikzpicture}
-    \caption{Variance of the waiting times for the three different redirection policies.}
-    \label{plot:var-waiting-times}
+    \caption{Waiting time per attraction for the three different redirection policies.}
+    \label{plot:waiting-time-per-attraction}
 \end{figure}
-
-As shown in the plot~\ref{plot:var-waiting-times}, the waiting times increase with the simulation steps. ...
