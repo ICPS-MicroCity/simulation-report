@@ -186,7 +186,8 @@ The following evaluations are based on the data obtained from 10 simulation runs
 
 As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps.
 The \textit{shortest queue redirection} is clearly the worst case, as visitors could cross the entire map in order to reach the attraction with the shortest queue.
-Instead, \textit{shortest queue in range redirection} assures that the next attraction will be inside a certain range, reducing the route to walk.
+Instead, \textit{shortest queue in range redirection} ensures that the next attraction will be within a certain range.
+In this way visitors will walk less in order to reach attractions.
 In fact, this policy brings on a higher number of satisfactions, even compared to the \textit{random redirection}.
 
 \begin{figure}[H]
@@ -255,12 +256,13 @@ In fact, this policy brings on a higher number of satisfactions, even compared t
 
 As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps.
 Paradoxically, the best case here is still the \textit{random redirection}.
-This is probably due to the physical distribution of visitors, that are much more spread in a random fashion.
+This is probably due to the fact that, specially at first, visitors are walking to reach their first destinations.
+In fact, the growth is slower at the beginning, but it increases after the first 1000 steps.
 Indeed, comparing the two recommendation-based policies the best one remains the \textit{shortest queue in range redirection}.
 
-However, considering the \textit{shortest queue in range redirection}, increasing waiting times also mean that visitors spend more time in queues and less time walking in order to reach the attractions.
-Keeping in mind that the number of satisfaction is higher for this policy, this can be considered a positive factor, as this result perfectly fits with the policy's aim.
-So, the correct trend to evaluate is the waiting time per attraction one, which is displayed in the plot~\ref{plot:waiting-time-per-attraction}.
+However, increasing waiting times also mean that visitors spend more time in queues and less time walking in order to reach attractions.
+Keeping in mind that the number of satisfaction is higher for this policy, this can be considered as a positive factor, since this result perfectly fits with the policy's aim.
+So, the correct trend to evaluate is the waiting time per attraction, which is displayed in the plot~\ref{plot:waiting-time-per-attraction}.
 
 \begin{figure}[H]
     \centering
