@@ -143,39 +143,36 @@ The following evaluations are based on the data obtained from 10 simulation runs
         ]
             \addplot [mark=*, color=blue] coordinates {
                 (0, 0.0)
-                (500, 0.355)
-                (1000, 1.026)
-                (1500, 1.729)
-                (2000, 2.439)
-                (2500, 3.151)
-                (3000, 3.860)
-                (3500, 4.570)
-                (4000, 5.275)
-                %(4500, 2.154)
+                (500, 0.485)
+                (1000, 1.164)
+                (1500, 1.868)
+                (2000, 2.582)
+                (2500, 3.289)
+                (3000, 4.003)
+                (3500, 4.712)
+                (4000, 5.413)
             };
             \addplot [mark=*, color=red] coordinates {
                 (0, 0.0)
-                (500, 0.112)
-                (1000, 0.277)
-                (1500, 0.460)
-                (2000, 0.675)
-                (2500, 0.901)
-                (3000, 1.163)
-                (3500, 1.439)
-                (4000, 1.720)
-                %(4500, 0.585)
+                (500, 0.143)
+                (1000, 0.310)
+                (1500, 0.501)
+                (2000, 0.718)
+                (2500, 0.951)
+                (3000, 1.216)
+                (3500, 1.493)
+                (4000, 1.775)
             };
             \addplot [mark=*, color=green] coordinates {
                 (0, 0.0)
-                (500, 0.340)
-                (1000, 1.067)
-                (1500, 1.833)
-                (2000, 2.607)
-                (2500, 3.384)
-                (3000, 4.161)
-                (3500, 4.941)
-                (4000, 5.714)
-                %(4500, 2.295)
+                (500, 0.480)
+                (1000, 1.215)
+                (1500, 1.986)
+                (2000, 2.764)
+                (2500, 3.539)
+                (3000, 4.315)
+                (3500, 5.096)
+                (4000, 5.869)
             };
             \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
         \end{axis}
@@ -204,7 +201,7 @@ In fact, this policy brings on a higher number of satisfactions, even compared t
         ymajorgrids=true,
         yminorgrids=true,
         xlabel={Simulation steps}, ylabel={Average waiting times}, title={},
-        axis on top=true, clip=false,  width=\textwidth, height=.65\textwidth,
+        axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
         legend style={
             at={(0,0)},
             anchor=south west,
@@ -213,39 +210,36 @@ In fact, this policy brings on a higher number of satisfactions, even compared t
         ]
         \addplot [mark=*, color=blue] coordinates {
             (0, 0.0)
-            (500, 99.535)
-            (1000, 375.396)
-            (1500, 643.649)
-            (2000, 909.336)
-            (2500, 1176.408)
-            (3000, 1446.915)
-            (3500, 1719.077)
-            (4000, 1994.998)
-            %(4500, 802.990)
+            (500, 152.321)
+            (1000, 429.644)
+            (1500, 696.678)
+            (2000, 962.481)
+            (2500, 1230.350)
+            (3000, 1501.000)
+            (3500, 1773.912)
+            (4000, 2050.661)
         };
         \addplot [mark=*, color=red] coordinates {
             (0, 0.0)
-            (500, 162.014)
-            (1000, 604.574)
-            (1500, 1043.843)
-            (2000, 1477.932)
-            (2500, 1905.712)
-            (3000, 2329.345)
-            (3500, 2739.352)
-            (4000, 3146.078)
-            %(4500, 1305.333)
+            (500, 246.016)
+            (1000, 692.887)
+            (1500, 1131.490)
+            (2000, 1563.703)
+            (2500, 1991.434)
+            (3000, 2412.041)
+            (3500, 2820.812)
+            (4000, 3227.854)
         };
         \addplot [mark=*, color=green] coordinates {
             (0, 0.0)
-            (500, 251.915)
-            (1000, 657.848)
-            (1500, 1061.185)
-            (2000, 1464.305)
-            (2500, 1866.976)
-            (3000, 2270.714)
-            (3500, 2676.743)
-            (4000, 3085.529)
-            %(4500, 1303.554)
+            (500, 333.227)
+            (1000, 738.908)
+            (1500, 1141.952)
+            (2000, 1544.734)
+            (2500, 1947.494)
+            (3000, 2351.805)
+            (3500, 2758.118)
+            (4000, 3167.170)
         };
         \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
         \end{axis}
@@ -268,10 +262,10 @@ So, the correct trend to evaluate is the waiting time per attraction, which is d
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-        xmin=0, xmax=4000,
-        ymin=0, ymax=0.01,
-        xtick={0, 500, ..., 4000},
-        minor ytick={0,0.001,...,0.01},
+        xmin=500, xmax=4000,
+        ymin=0, ymax=2500,
+        xtick={500, 1000, ..., 4000},
+        minor ytick={0,250,...,2500},
         axis x line=bottom,
         axis y line=left,
         axis x discontinuity=crunch,
@@ -286,40 +280,34 @@ So, the correct trend to evaluate is the waiting time per attraction, which is d
         }
         ]
         \addplot [mark=*, color=blue] coordinates {
-            (0, 0.0)
-            (500, 0.00357296)
-            (1000, 0.00273258)
-            (1500, 0.00268578)
-            (2000, 0.00268181)
-            (2500, 0.00267824)
-            (3000, 0.00266749)
-            (3500, 0.00265813)
-            (4000, 0.00264403)
-            %(4500, 1.0)
-        };
-        \addplot [mark=*, color=green] coordinates {
-            (0, 0.0)
-            (500, 0.00069089)
-            (1000, 0.00045751)
-            (1500, 0.00044065)
-            (2000, 0.00045647)
-            (2500, 0.00047261)
-            (3000, 0.00049928)
-            (3500, 0.00052542)
-            (4000, 0.00054677)
-            %(4500, 1.0)
+            (500, 256.104)
+            (1000, 338.964)
+            (1500, 371.013)
+            (2000, 372.959)
+            (2500, 372.818)
+            (3000, 374.036)
+            (3500, 375.229)
+            (4000, 376.924)
         };
         \addplot [mark=*, color=red] coordinates {
-            (0, 0.0)
-            (500, 0.00134768)
-            (1000, 0.00162175)
-            (1500, 0.00172706)
-            (2000, 0.00178062)
-            (2500, 0.00181259)
-            (3000, 0.00183261)
-            (3500, 0.00184581)
-            (4000, 0.00185177)
-            %(4500, 1.0)
+            (500, 430.593)
+            (1000, 1924.930)
+            (1500, 2248.799)
+            (2000, 2243.594)
+            (2500, 2164.473)
+            (3000, 2071.481)
+            (3500, 1962.011)
+            (4000, 1873.420)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            (500, 711.708)
+            (1000, 665.818)
+            (1500, 598.230)
+            (2000, 571.458)
+            (2500, 557.038)
+            (3000, 548.701)
+            (3500, 543.713)
+            (4000, 540.424)
         };
         \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
         \end{axis}
