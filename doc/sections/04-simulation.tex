@@ -1,0 +1,338 @@
+\section{The Simulation}\label{sec:the-simulation}
+
+In this section, we discuss the main elements of the simulation.
+To fully understand the concepts that are discussed here, such as nodes and programs, please refer to the~\href{https://alchemistsimulator.github.io/}{Alchemist documentation}.
+
+\subsection{Map Environment}\label{subsec:map-environment}
+The simulation concerns an existing geographical location, that is the amusement park of~\href{https://www.mirabilandia.it/}{\textit{Mirabilandia}}.
+For this reason, the environment of the simulation must be a map featuring existing paths in the real world.
+To achieve this, \textit{Alchemist} allows using maps provided by \href{https://www.openstreetmap.org/}{\textit{OpenStreetMap}}, the free wiki world map. \textit{OpenStreetMap} provides navigation capabilities on the whole planet;
+such data, weighs about 50GB, thus it is recommended to use an extract with the data relative to the interested area.
+One great way to obtain an extract is through~\href{https://extract.bbbike.org/}{\textit{BBBike}}~\cite{Pianini_2013}.
+
+Once extracted the map in the \texttt{.pbf} format, it is possible to build the simulation environment through the~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvironment}}, as shown in the following listing (\ref{lst:osm}).
+
+\input{../code/osm}
+
+\noindent
+The constructor of the environment accepts two parameters:
+\begin{itemize}
+    \item \texttt{file: String}, the path to the file containing the exported map;
+    \item \texttt{onlyOnStreets: Boolean}, a boolean value allowing to deploy nodes only on the streets.
+\end{itemize}
+
+\subsection{Deployed Nodes}\label{subsec:deployed-nodes}
+After setting the environment, it is essential to deploy \textbf{nodes} on the map.
+In the current simulation, the elements that are represented by nodes are:
+\begin{itemize}
+    \item \textbf{Visitors}, as single individuals or groups;
+    the key point here is that a node should correspond to one or more people using a single wearable device that tracks and guides its owner.
+    \item \textbf{Attractions}, that can be of different types, such as rides, water slides, restaurants, etc.; they are considered \textit{rendezvous} points for visitors and are made of several sensors that allow keeping track of various information, such as the number of people waiting in a queue.
+\end{itemize}
+
+\noindent
+In order to deploy nodes on the map it is mandatory to declare them under the \texttt{deployments} section, as shown in the following listing.
+
+\input{../code/deployments}
+
+\noindent
+Moreover, it is necessary to explicit which \textbf{linking rule} will be used to connect nodes with each other.
+As for the current simulation, the proper way to connect nodes cannot be based on a geometric rule (for instance, connecting nodes within a certain distance).
+Instead, it is appropriate to consider attractions as \textbf{access points} for the visitors' devices.
+Even with the~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.linkingrules/-connect-to-access-point/index.html}{\texttt{ConnectToAccessPoint}} linking rule every node on the map will be connected with the rest of the network as the attractions are distributed throughout the map, and, working as access points, they can cover it without leaving connectionless areas.
+
+\input{../code/linking}
+
+\subsection{Programmed Behaviours}
+With both the environment and the nodes correctly set, the next step consists in programming their behaviours.
+Each and every node needs to implement a proper behaviour depending on its type.
+In particular, visitors and attractions will have different behaviours: for instance, visitors should move on the map in order to get to attractions, while the latter should stay still and satisfy enqueued visitors.
+The behaviours are written using the \textit{Protelis} aggregate language.
+Although, performing local computations using a programming language designed for the aggregate paradigm is probably not the best choice.
+So, it is appropriate to implement local computations with a different language.
+Therefore, for this simulation, also \textit{Kotlin} was used.
+The following sections describe the behaviours implemented by visitors and attractions.
+
+\subsubsection{Attractions' Positions}
+In order to make each visitor node aware of the positions of all the attractions in the map, it is necessary to implement a behaviour that spreads the desired information.
+To do so, it is useful to use \textit{aggregate programming}.
+Specifically, \textit{Alchemist} allows inserting an external program into a node, as shown in the following listing.
+
+\input{../code/positions}
+
+On the other hand, the definition of the aggregate program should describe how the desired information is spread as a field.
+In particular, each node should gather the field from its neighbours and merge the received values.
+The listing~\ref{lst:protelis-positions} shows how it is possible to implement this behaviour in \textit{Protelis}.
+
+\input{../code/protelis-positions}
+
+The \texttt{attractionPositions} function simply builds a list with the node's position if it presents an ``attraction" molecule, otherwise an empty list.
+In this way, the field is composed by lists of positions containing only attractions' coordinates.
+The \texttt{attractionUnion} function just unifies the received lists into a single one.
+
+\subsubsection{Queues \& Satisfaction}
+Similarly to positions, it is necessary to keep track of the queues that form nearby attractions and broadcast them to visitors.
+The queue formed nearby an attraction is determined by the sequence of visitors that have the same coordinates as the attraction.
+Though, it is important that the visitors waiting in the queue are not satisfied.
+In fact, a visitor's satisfaction is a condition that only occurs after it has benefited from an attraction.
+When satisfied, the visitor is then ready to choose the next destination, and, once the next attraction is decided, it can switch back to unsatisfied.
+These behaviours can be split into 3 different \textit{Protelis} programs:
+\begin{itemize}
+  \item \textbf{\texttt{queue}}: given an attraction, determine the list of visitors that are enqueued to it.
+  \item \textbf{\texttt{queues}}: broadcast the queues of every attraction to every visitor.
+  \item \textbf{\texttt{satisfaction}}: given an attraction, satisfy the first $N$ visitors in its queue, where $N$ represents the attraction's capacity.
+\end{itemize}
+
+\noindent
+All these behaviours are programmed by both attractions and visitors.
+The \texttt{satisfaction} program has a lower time distribution, as it is assumed that it takes a while for an attraction to satisfy visitors.
+
+\subsubsection{Movement}\label{subsubsec:movement}
+Movement is a feature only owned by visitors.
+It is implemented as a \href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.actions/-target-map-walker/index.html}{\texttt{TargetMapWalker}}: this action needs a ``tracking" molecule inside the implementing node that has a destination's coordinates as its concentration.
+Moreover, the latter allows nodes to move only on maps' streets, adapting to the provided~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.model.implementations.environments/-o-s-m-environment/}{\texttt{OSMEnvironment}}.
+
+As discussed in the section~\ref{sec:the-case-study}, in order to decide its next destination, a visitor can adopt one of these two policies: \textbf{Random Redirection} or \textbf{Recommended Redirection}.
+In order to achieve this, visitors also own a program that establishes the next destination with one of the two policies and inserts its coordinates in a molecule.
+The listing~\ref{code:movement} shows how the \texttt{TargetMapWalker} behaviour and the \texttt{destination} behaviour are assigned to the visitor nodes.
+
+\input{../code/movement}
+
+In order to choose the next destination for a visitor, a \textit{Protelis} program will call a function \texttt{getNext} that will return the coordinates of the next attraction.
+It is possible to define a custom policy just by implementing the interface \texttt{NextPolicy}, and therefore defining the method \texttt{getNext}.
+For the sake of the current simulations, the following policies were provided:
+\begin{itemize}
+    \item \texttt{RandomPolicy}: performs a \textit{random redirection} by choosing one of the attractions inside the park randomly.
+    \item \texttt{ShortestQueuePolicy}: performs a \textit{recommended redirection} by choosing the attraction with the shortest queue inside the whole park.
+    \item \texttt{ShortestQueueInRangePolicy}: performs a \textit{recommended redirection} by choosing the attraction with the shortest queue within a given range with regard to the visitor.
+\end{itemize}
+
+\subsection{Data Extraction \& Evaluation}\label{subsec:data-extraction}
+The whole point of the simulations consists in determining whether a \textit{situated recommendation system} may help reduce the waiting time for visitors inside the park.
+In order to evaluate that, it is necessary to extract data from the simulation.
+In particular, the data we extracted and analyzed concerns the amount of time spent in a queue and the number of attractions that every visitor has benefited from.
+Data extraction is achieved thanks to the implementation of an~\href{https://alchemistsimulator.github.io/reference/kdoc/alchemist/it.unibo.alchemist.loader.export/-extractor/index.html}{\texttt{Extractor}} that allows controlling and exploring the environment at each simulation step.
+Thanks to that, it was possible extract the waiting time that every visitor spends in a queue at each simulation step.
+On the other hand, counting the amount of times that a visitor has been satisfied by an attraction was possible thanks to a specific molecule \texttt{satisfactions}.
+These two types of data, on average, considering both the \textit{random redirection} and the \textit{recommended redirection} systems, consent to state whether visitors benefit from more attractions and wait less time in queues or not;
+thus, they are considered to be a reasonable way to evaluate the \textit{situated recommendation system}.
+
+For the evaluation, the right way to obtain reliable data is to launch every simulation multiple times and finally consider the average values of such data.
+The following evaluations are based on the data obtained from 10 simulation runs for each redirection policy described in the section~\ref{subsubsec:movement}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            xmin=0, xmax=5000,
+            ymin=0, ymax=25,
+            xtick={0, 500, ..., 5000},
+            minor ytick={0,5,...,25},
+            axis x line=bottom,
+            axis y line=left,
+            axis x discontinuity=crunch,
+            ymajorgrids=true,
+            yminorgrids=true,
+            xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+            axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
+            legend style={
+                at={(0,0)},
+                anchor=south west,
+                at={(axis description cs:-0.1, -0.4)}
+            }
+        ]
+            \addplot [mark=*, color=red] coordinates {
+                (0, 0.0)
+                (500, 0.957)
+                (1000, 2.221)
+                (1500, 3.459)
+                (2000, 4.712)
+                (2500, 5.951)
+                (3000, 7.181)
+                (3500, 8.417)
+                (4000, 9.683)
+                (4500, 10.912)
+                (5000, 12.116)
+            };
+            \addplot [mark=*, color=blue] coordinates {
+                (0, 0.0)
+                (500, 0.960)
+                (1000, 2.235)
+                (1500, 3.533)
+                (2000, 4.822)
+                (2500, 6.132)
+                (3000, 7.428)
+                (3500, 8.722)
+                (4000, 10.037)
+                (4500, 11.327)
+                (5000, 12.616)
+            };
+            \addplot [mark=*, color=green] coordinates {
+                (0, 0.0)
+                (500, 1.758)
+                (1000, 4.005)
+                (1500, 6.288)
+                (2000, 8.652)
+                (2500, 10.991)
+                (3000, 13.342)
+                (3500, 15.660)
+                (4000, 18.006)
+                (4500, 20.380)
+                (5000, 22.708)
+            };
+            \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average satisfactions for the three different redirection policies.}
+    \label{plot:mean-satisfaction}
+\end{figure}
+
+As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps.
+The \textit{random redirection} is clearly the worst case, as visitors could cross the entire map in order to reach the next attraction.
+A light improvement is given by the \textit{shortest queue redirection}, that allows visitors to reach attractions with shorter queues and, therefore, benefit from more of them.
+Instead, \textit{shortest queue in range redirection} ensures that the next attraction will be within a certain range.
+In this way visitors will walk less in order to reach attractions.
+In fact, this policy brings on a higher number of satisfactions.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=0, xmax=5000,
+        ymin=0, ymax=2500,
+        xtick={0, 500, ..., 5000},
+        minor ytick={0,250,...,2500},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Average waiting time units}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
+        }
+        ]
+        \addplot [mark=*, color=red] coordinates {
+            (0, 0.0)
+            (500, 117.333)
+            (1000, 248.860)
+            (1500, 379.421)
+            (2000, 510.019)
+            (2500, 639.747)
+            (3000, 770.142)
+            (3500, 900.912)
+            (4000, 1031.302)
+            (4500, 1160.247)
+            (5000, 1289.777)
+        };
+        \addplot [mark=*, color=blue] coordinates {
+            (0, 0.0)
+            (500, 113.332)
+            (1000, 229.374)
+            (1500, 344.452)
+            (2000, 457.032)
+            (2500, 571.298)
+            (3000, 685.794)
+            (3500, 800.971)
+            (4000, 916.081)
+            (4500, 1028.831)
+            (5000, 1140.706)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            (0, 0.0)
+            (500, 203.700)
+            (1000, 411.347)
+            (1500, 621.996)
+            (2000, 838.839)
+            (2500, 1054.779)
+            (3000, 1274.246)
+            (3500, 1497.394)
+            (4000, 1720.087)
+            (4500, 1941.163)
+            (5000, 2162.999)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average waiting times for the three different redirection policies.}
+    \label{plot:mean-waiting-times}
+\end{figure}
+
+As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps.
+As expected, the waiting times for the \textit{shortest queue redirection} are slightly better than the \textit{random redirection} ones.
+Though, at first sight, the \textit{shortest queue range redirection} seems to be the worst case, since its waiting time almost double the others.
+However, increasing waiting times also mean that visitors spend more time in queues and less time walking in order to reach attractions.
+Keeping in mind that the number of satisfaction is higher for this policy, this can be considered as a positive factor, since this result perfectly fits the policy's aim.
+So, the correct trend to evaluate is the waiting time per attraction, which is displayed in the plot~\ref{plot:waiting-time-per-attraction}.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=1000, xmax=5000,
+        ymin=90, ymax=120,
+        xtick={1000, 1500, ..., 5000},
+        minor ytick={90,95,...,120},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Waiting time units per attraction}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
+        }
+        ]
+        \addplot [mark=*, color=red] coordinates {
+            %(500, 290.427)
+            (1000, 116.584)
+            (1500, 110.516)
+            (2000, 109.211)
+            (2500, 108.141)
+            (3000, 107.558)
+            (3500, 107.105)
+            (4000, 106.991)
+            (4500, 106.478)
+            (5000, 106.297)
+        };
+        \addplot [mark=*, color=blue] coordinates {
+            %(500, 309.508)
+            (1000, 113.116)
+            (1500, 101.296)
+            (2000, 96.812)
+            (2500, 94.461)
+            (3000, 93.070)
+            (3500, 92.244)
+            (4000, 91.726)
+            (4500, 91.244)
+            (5000, 90.739)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            %(500, 318.817)
+            (1000, 111.534)
+            (1500, 100.970)
+            (2000, 98.213)
+            (2500, 96.779)
+            (3000, 95.751)
+            (3500, 95.219)
+            (4000, 95.620)
+            (4500, 95.383)
+            (5000, 95.194)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Waiting time per attraction for the three different redirection policies.}
+    \label{plot:waiting-time-per-attraction}
+\end{figure}
+
+As shown in the plot, the \textit{situated recommendation system} can reduce the average waiting time spent in queues.
+In particular, the \textit{shortest queue redirection} performs slightly better than the \textit{range} one.
+This happens because the \textit{shortest queue range redirection} policy finds a \textbf{local optimum}: it only looks for attractions within a certain range, so it may not consider better options outside its range.
+Still, the latter grants the advantage of benefiting from a higher number of attractions.

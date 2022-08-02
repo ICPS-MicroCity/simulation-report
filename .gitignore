@@ -1,3 +1,5 @@
+.idea
+
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
 *.aux
@@ -11,7 +13,8 @@
 *.fot
 *.cb
 *.cb2
-.*.lb
+.*.lbù
+out
 
 ## Intermediate documents:
 *.dvi

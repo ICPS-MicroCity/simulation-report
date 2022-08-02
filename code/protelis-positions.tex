@@ -1,0 +1,10 @@
+\begin{lstlisting}[label={lst:protelis-positions}, caption=Sharing the coordinates of each attraction to all the nodes that implement this behaviour.]
+module org:protelis:microcity:positions
+
+import microcity.Positions.attractionPositions
+import microcity.Positions.attractionUnion
+
+share (field <- attractionPositions()) {
+    foldHoodPlusSelf(field, { a, b -> attractionUnion(a, b) })
+}
+\end{lstlisting}
