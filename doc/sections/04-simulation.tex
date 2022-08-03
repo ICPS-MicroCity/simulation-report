@@ -187,6 +187,7 @@ The following evaluations are based on the data obtained from 10 simulation runs
     \label{plot:mean-satisfaction}
 \end{figure}
 
+\noindent
 As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps.
 The \textit{random redirection} is clearly the worst case, as visitors could cross the entire map in order to reach the next attraction.
 A light improvement is given by the \textit{shortest queue redirection}, that allows visitors to reach attractions with shorter queues and, therefore, benefit from more of them.
@@ -261,6 +262,7 @@ In fact, this policy brings on a higher number of satisfactions.
     \label{plot:mean-waiting-times}
 \end{figure}
 
+\noindent
 As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps.
 As expected, the waiting times for the \textit{shortest queue redirection} are slightly better than the \textit{random redirection} ones.
 Though, at first sight, the \textit{shortest queue range redirection} seems to be the worst case, since its waiting time almost double the others.
@@ -332,7 +334,193 @@ So, the correct trend to evaluate is the waiting time per attraction, which is d
     \label{plot:waiting-time-per-attraction}
 \end{figure}
 
+\noindent
 As shown in the plot, the \textit{situated recommendation system} can reduce the average waiting time spent in queues.
 In particular, the \textit{shortest queue redirection} performs slightly better than the \textit{range} one.
 This happens because the \textit{shortest queue range redirection} policy finds a \textbf{local optimum}: it only looks for attractions within a certain range, so it may not consider better options outside its range.
 Still, the latter grants the advantage of benefiting from a higher number of attractions.
+
+Indeed, the prior data are related to a simulation launched with 500 visitors, that is the average amount of visitors that attend the park of Mirabilandia in the winter season.
+During the summer, the number of visitors grows significantly, up to almost 10\_000 people.
+The following plots show the same data with a higher number of visitors, that is 3000.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=0, xmax=3000,
+        ymin=0, ymax=5,
+        xtick={0, 500, ..., 3000},
+        minor ytick={0,1,...,5},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
+        }
+        ]
+        \addplot [mark=*, color=red] coordinates {
+            (0, 0.0)
+            (500, 0.497)
+            (1000, 1.212)
+            (1500, 1.947)
+            (2000, 2.682)
+            (2500, 3.421)
+            (3000, 4.165)
+        };
+        \addplot [mark=*, color=blue] coordinates {
+            (0, 0.0)
+            (500, 0.493)
+            (1000, 1.217)
+            (1500, 1.899)
+            (2000, 2.591)
+            (2500, 3.292)
+            (3000, 3.966)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            (0, 0.0)
+            (500, 0.610)
+            (1000, 1.340)
+            (1500, 2.049)
+            (2000, 2.757)
+            (2500, 3.473)
+            (3000, 4.184)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average satisfactions for the three different redirection policies.}
+    \label{plot:mean-satisfaction-3000}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=0, xmax=3000,
+        ymin=0, ymax=2000,
+        xtick={0, 500, ..., 3000},
+        minor ytick={0,200,...,2000},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Average waiting time units}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
+        }
+        ]
+        \addplot [mark=*, color=red] coordinates {
+            (0, 0.0)
+            (500, 167.384)
+            (1000, 460.799)
+            (1500, 743.898)
+            (2000, 1023.414)
+            (2500, 1303.576)
+            (3000, 1582.198)
+        };
+        \addplot [mark=*, color=blue] coordinates {
+            (0, 0.0)
+            (500, 166.544)
+            (1000, 448.992)
+            (1500, 746.169)
+            (2000, 1036.409)
+            (2500, 1328.892)
+            (3000, 1620.118)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            (0, 0.0)
+            (500, 285.045)
+            (1000, 594.678)
+            (1500, 917.621)
+            (2000, 1249.798)
+            (2500, 1569.602)
+            (3000, 1887.534)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Average waiting times for the three different redirection policies.}
+    \label{plot:mean-waiting-times-3000}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+        xmin=1000, xmax=3000,
+        ymin=300, ymax=550,
+        xtick={1000, 1500, ..., 3000},
+        minor ytick={300,350,...,550},
+        axis x line=bottom,
+        axis y line=left,
+        axis x discontinuity=crunch,
+        ymajorgrids=true,
+        yminorgrids=true,
+        xlabel={Simulation steps}, ylabel={Waiting time units per attraction}, title={},
+        axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
+        legend style={
+            at={(0,0)},
+            anchor=south west,
+            at={(axis description cs:-0.1, -0.4)}
+        }
+        ]
+        \addplot [mark=*, color=red] coordinates {
+            %(500, 354.760)
+            (1000, 356.734)
+            (1500, 381.503)
+            (2000, 381.801)
+            (2500, 381.387)
+            (3000, 380.586)
+        };
+        \addplot [mark=*, color=blue] coordinates {
+            %(500, 301.656)
+            (1000, 350.215)
+            (1500, 375.615)
+            (2000, 394.110)
+            (2500, 401.488)
+            (3000, 404.469)
+        };
+        \addplot [mark=*, color=green] coordinates {
+            %(500, 518.637)
+            (1000, 454.950)
+            (1500, 444.058)
+            (2000, 449.740)
+            (2500, 453.649)
+            (3000, 451.811)
+        };
+        \legend{Random redirection, Shortest queue redirection, Shortest queue in range redirection}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Waiting time per attraction for the three different redirection policies.}
+    \label{plot:waiting-time-per-attraction}
+\end{figure}
+
+\noindent
+As shown in the plots, the number of satisfactions decreases with a higher number of visitors.
+This is reasonable, as more visitors also means longer queues.
+The most suspicious data concerns the waiting times, that are longer for the \textit{shortest queue range redirection} policy.
+Paradoxically, the best case here is still the \textit{random redirection}.
+
+Although the outcome of the simulation with 500 visitors went exactly as expected, it was not the case for the one with 3000 visitors.
+This could be caused by disparate reasons:
+\begin{itemize}
+    \item the policies may be too simple.
+    In fact, the attractions that in a given moment are less crowded end up being the most crowded a few moments later because a huge amount of visitors is redirected there.
+    Therefore, improvements may be made to the policies in order to make the recommendation system more effective.
+    For instance, the \textit{shortest queue range redirection} could be fine tuned with the optimal range, or it could be more correct to choose an attraction calculating the route distance.
+    One last idea could be to use more than one policy: this way different subsets of visitors could use different policies.
+    \item the simulation does not perfectly match the reality.
+    For instance, not all the visitors in a real scenario will accept the recommendation received.
+    Moreover, at the current state of the simulation visitors’ interests and preferences are not taken into account.
+\end{itemize}
