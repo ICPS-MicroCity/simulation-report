@@ -1,3 +1,10 @@
+## [0.1.1](https://github.com/ICPS-MicroCity/simulation-report/compare/v0.1.0...v0.1.1) (2022-08-03)
+
+
+### Bug Fixes
+
+* add data evaluation for second simulation ([20d322d](https://github.com/ICPS-MicroCity/simulation-report/commit/20d322d6f44061ba279dcde2a690877219095d63))
+
 # [0.1.0](https://github.com/ICPS-MicroCity/simulation-report/compare/v0.0.1...v0.1.0) (2022-08-02)
 
 
