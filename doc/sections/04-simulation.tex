@@ -133,7 +133,7 @@ The following evaluations are based on the data obtained from 10 simulation runs
             axis x discontinuity=crunch,
             ymajorgrids=true,
             yminorgrids=true,
-            xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+            xlabel={Simulation time (s)}, ylabel={Average satisfactions}, title={},
             axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
             legend style={
                 at={(0,0)},
@@ -188,7 +188,7 @@ The following evaluations are based on the data obtained from 10 simulation runs
 \end{figure}
 
 \noindent
-As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation steps.
+As shown in the plot~\ref{plot:mean-satisfaction}, the number of satisfactions increases with the simulation time.
 The \textit{random redirection} is clearly the worst case, as visitors could cross the entire map in order to reach the next attraction.
 A light improvement is given by the \textit{shortest queue redirection}, that allows visitors to reach attractions with shorter queues and, therefore, benefit from more of them.
 Instead, \textit{shortest queue in range redirection} ensures that the next attraction will be within a certain range.
@@ -208,7 +208,7 @@ In fact, this policy brings on a higher number of satisfactions.
         axis x discontinuity=crunch,
         ymajorgrids=true,
         yminorgrids=true,
-        xlabel={Simulation steps}, ylabel={Average waiting time units}, title={},
+        xlabel={Simulation time (s)}, ylabel={Average waiting time units}, title={},
         axis on top=true, clip=false,  width=\textwidth, height=.6\textwidth,
         legend style={
             at={(0,0)},
@@ -263,7 +263,7 @@ In fact, this policy brings on a higher number of satisfactions.
 \end{figure}
 
 \noindent
-As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation steps.
+As shown in the plot~\ref{plot:mean-waiting-times}, the waiting times increase with the simulation time.
 As expected, the waiting times for the \textit{shortest queue redirection} are slightly better than the \textit{random redirection} ones.
 Though, at first sight, the \textit{shortest queue range redirection} seems to be the worst case, since its waiting time almost double the others.
 However, increasing waiting times also mean that visitors spend more time in queues and less time walking in order to reach attractions.
@@ -283,7 +283,7 @@ So, the correct trend to evaluate is the waiting time per attraction, which is d
         axis x discontinuity=crunch,
         ymajorgrids=true,
         yminorgrids=true,
-        xlabel={Simulation steps}, ylabel={Waiting time units per attraction}, title={},
+        xlabel={Simulation time (s)}, ylabel={Waiting time units per attraction}, title={},
         axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
         legend style={
             at={(0,0)},
@@ -357,7 +357,7 @@ The following plots show the same data with a higher number of visitors, that is
         axis x discontinuity=crunch,
         ymajorgrids=true,
         yminorgrids=true,
-        xlabel={Simulation steps}, ylabel={Average satisfactions}, title={},
+        xlabel={Simulation time (s)}, ylabel={Average satisfactions}, title={},
         axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
         legend style={
             at={(0,0)},
@@ -412,7 +412,7 @@ The following plots show the same data with a higher number of visitors, that is
         axis x discontinuity=crunch,
         ymajorgrids=true,
         yminorgrids=true,
-        xlabel={Simulation steps}, ylabel={Average waiting time units}, title={},
+        xlabel={Simulation time (s)}, ylabel={Average waiting time units}, title={},
         axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
         legend style={
             at={(0,0)},
@@ -467,7 +467,7 @@ The following plots show the same data with a higher number of visitors, that is
         axis x discontinuity=crunch,
         ymajorgrids=true,
         yminorgrids=true,
-        xlabel={Simulation steps}, ylabel={Waiting time units per attraction}, title={},
+        xlabel={Simulation time (s)}, ylabel={Waiting time units per attraction}, title={},
         axis on top=true, clip=false,  width=\textwidth, height=.5\textwidth,
         legend style={
             at={(0,0)},
